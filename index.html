@@ -1473,8 +1473,8 @@
   will-change: transform;
 }
 
-.hobby-card:hover .hobby-card-inner,
-.hobby-card.active .hobby-card-inner {
+/* REMOVED hover-only selector, using only active class */
+.hobby-card.flipped .hobby-card-inner {
   transform: rotateY(180deg);
 }
 
@@ -1540,8 +1540,7 @@
   transition: transform 0.5s ease;
 }
 
-.hobby-card:hover .hobby-image,
-.hobby-card.active .hobby-image {
+.hobby-card.flipped .hobby-image {
   transform: scale(1.05);
 }
 
@@ -1561,8 +1560,7 @@
   transition: all 0.3s ease;
 }
 
-.hobby-card:hover .hobby-icon-overlay,
-.hobby-card.active .hobby-icon-overlay {
+.hobby-card.flipped .hobby-icon-overlay {
   background: rgba(0, 188, 212, 0.9);
   width: 65px;
   height: 65px;
@@ -1574,8 +1572,7 @@
   transition: all 0.3s ease;
 }
 
-.hobby-card:hover .hobby-icon-overlay i,
-.hobby-card.active .hobby-icon-overlay i {
+.hobby-card.flipped .hobby-icon-overlay i {
   color: white;
   font-size: 2rem;
 }
@@ -1603,7 +1600,7 @@
   transform: rotateY(180deg);
   text-align: center;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
 .hobby-card-back::-webkit-scrollbar {
@@ -1639,7 +1636,7 @@
   overflow-y: auto;
 }
 
-/* Close button for mobile (only visible on back side) */
+/* Close button */
 .hobby-close-btn {
   position: absolute;
   top: 10px;
@@ -1659,13 +1656,45 @@
   transition: opacity 0.3s ease;
 }
 
-.hobby-card-back .hobby-close-btn {
+.hobby-card.flipped .hobby-close-btn {
   opacity: 1;
 }
 
 .hobby-close-btn i {
   font-size: 1rem;
   margin: 0;
+}
+
+/* Desktop hover support */
+@media (hover: hover) and (pointer: fine) {
+  .hobby-card:hover .hobby-card-inner {
+    transform: rotateY(180deg);
+  }
+  
+  .hobby-card:hover .hobby-image {
+    transform: scale(1.05);
+  }
+  
+  .hobby-card:hover .hobby-icon-overlay {
+    background: rgba(0, 188, 212, 0.9);
+    width: 65px;
+    height: 65px;
+  }
+  
+  .hobby-card:hover .hobby-icon-overlay i {
+    color: white;
+    font-size: 2rem;
+  }
+  
+  /* Hide close button on desktop hover */
+  .hobby-card:hover .hobby-close-btn {
+    display: none;
+  }
+  
+  /* Hide tap indicator on desktop */
+  .hobby-card::after {
+    display: none;
+  }
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
@@ -1689,7 +1718,7 @@
   }
 }
 
-/* Mobile - 1 column with better touch experience */
+/* Mobile - 1 column */
 @media (max-width: 767px) {
   .hobbies-grid {
     grid-template-columns: 1fr;
@@ -1735,18 +1764,9 @@
     line-height: 1.4;
   }
   
-  /* Prevent text selection on mobile */
-  .hobby-card * {
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-  }
-  
-  /* Allow text selection on back side */
-  .hobby-card-back * {
-    -webkit-user-select: text;
-    user-select: text;
+  /* Show close button on mobile */
+  .hobby-card.flipped .hobby-close-btn {
+    display: flex;
   }
 }
 
@@ -1775,28 +1795,6 @@
   
   .hobby-card-back p {
     font-size: 0.75rem;
-  }
-}
-
-/* Prevent hover effects on touch devices */
-@media (hover: none) and (pointer: coarse) {
-  .hobby-card:hover .hobby-card-inner {
-    transform: none;
-  }
-  
-  .hobby-card:hover .hobby-image {
-    transform: none;
-  }
-  
-  .hobby-card:hover .hobby-icon-overlay {
-    background: rgba(0, 0, 0, 0.7);
-    width: 60px;
-    height: 60px;
-  }
-  
-  .hobby-card:hover .hobby-icon-overlay i {
-    color: var(--primary);
-    font-size: 1.8rem;
   }
 }
   </style>
@@ -2382,55 +2380,48 @@
   </footer>
 
   <script>
+    
+// Add this to your existing JavaScript, inside the DOMContentLoaded event listener
 // Add this to your existing JavaScript, inside the DOMContentLoaded event listener
 
-// Enhanced mobile touch support for flip cards
+// Simple and reliable flip card functionality
 const hobbyCards = document.querySelectorAll('.hobby-card');
 
 // Function to close all cards
 function closeAllCards() {
   hobbyCards.forEach(card => {
-    card.classList.remove('active');
-    // Reset any scroll position
-    const backSide = card.querySelector('.hobby-card-back');
-    if (backSide) {
-      backSide.scrollTop = 0;
-    }
+    card.classList.remove('flipped');
   });
 }
 
 // Function to toggle specific card
 function toggleCard(card) {
-  if (card.classList.contains('active')) {
-    card.classList.remove('active');
+  if (card.classList.contains('flipped')) {
+    card.classList.remove('flipped');
   } else {
+    // Close all other cards first
     closeAllCards();
-    card.classList.add('active');
+    // Open this card
+    card.classList.add('flipped');
     
-    // Scroll card into view on mobile
+    // On mobile, scroll card into view
     if (window.innerWidth <= 768) {
       setTimeout(() => {
         card.scrollIntoView({ 
           behavior: 'smooth', 
-          block: 'center',
-          inline: 'nearest' 
+          block: 'nearest'
         });
-      }, 300);
+      }, 100);
     }
   }
 }
 
 // Add event listeners to cards
 hobbyCards.forEach(card => {
-  // Click/tap to flip
+  // Click on front side to flip
   card.addEventListener('click', function(e) {
-    // Don't trigger if clicking the close button
+    // Don't flip if clicking the close button
     if (e.target.closest('.hobby-close-btn')) {
-      return;
-    }
-    
-    // Don't trigger if clicking links inside the card
-    if (e.target.tagName === 'A') {
       return;
     }
     
@@ -2442,37 +2433,37 @@ hobbyCards.forEach(card => {
   if (closeBtn) {
     closeBtn.addEventListener('click', function(e) {
       e.stopPropagation(); // Prevent card click event
-      card.classList.remove('active');
+      card.classList.remove('flipped');
     });
   }
 });
 
-// Close cards when clicking outside
+// Close cards when clicking outside (for mobile)
 document.addEventListener('click', function(e) {
-  if (!e.target.closest('.hobby-card') && !e.target.closest('.hobbies-grid')) {
+  // If clicked outside any hobby card, close all cards
+  if (!e.target.closest('.hobby-card')) {
     closeAllCards();
   }
 });
 
 // Close cards with Escape key
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
+  if (e.key === 'Escape' || e.key === 'Escape') {
     closeAllCards();
   }
 });
 
-// Handle orientation change on mobile
+// Handle window resize - reset cards on orientation change
 let resizeTimer;
 window.addEventListener('resize', function() {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(function() {
-    // Close all cards on orientation change
+    // On mobile orientation change, close all cards
     if (window.innerWidth <= 768) {
       closeAllCards();
     }
-  }, 250);
+  }, 150);
 });
-
 // Prevent card flipping on scroll for mobile
 let touchStartY = 0;
 let touchEndY = 0;

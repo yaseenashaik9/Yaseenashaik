@@ -1437,6 +1437,210 @@
     ::-webkit-scrollbar-thumb:hover {
       background: var(--primary-dark);
     }
+
+
+   /* ===== HOBBIES SECTION ===== */
+/* ===== HOBBIES SECTION WITH FLIP CARDS ===== */
+.hobbies-section {
+  background-color: var(--dark-card);
+  padding: var(--space-2xl) 0;
+}
+
+.hobbies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* Flip Card Container */
+.hobby-card {
+  background-color: transparent;
+  perspective: 1000px;
+  height: 300px;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+}
+
+.hobby-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  border-radius: var(--radius-lg);
+}
+
+.hobby-card:hover .hobby-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Front and back sides */
+.hobby-card-front, .hobby-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+}
+
+/* Front side (image) */
+.hobby-card-front {
+  background-color: var(--dark-card);
+  border: 2px solid var(--primary-dark);
+  overflow: hidden;
+}
+
+.hobby-card-front::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  z-index: 2;
+}
+
+.hobby-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  transition: transform 0.5s ease;
+}
+
+.hobby-card:hover .hobby-image {
+  transform: scale(1.05);
+}
+
+.hobby-icon-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.hobby-icon-overlay i {
+  font-size: 2rem;
+  color: var(--primary);
+}
+
+.hobby-title-front {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+  color: white;
+  padding: var(--space-md) var(--space-sm);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  z-index: 1;
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+}
+
+/* Back side (text) */
+.hobby-card-back {
+  background-color: var(--dark-card);
+  border: 2px solid var(--primary);
+  transform: rotateY(180deg);
+  text-align: center;
+}
+
+.hobby-card-back i {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-md);
+  color: var(--primary);
+}
+
+.hobby-card-back h3 {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-sm);
+  color: var(--light-text);
+  line-height: 1.4;
+}
+
+.hobby-card-back p {
+  color: var(--light-secondary);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  margin-bottom: var(--space-xs);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .hobbies-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .hobbies-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .hobby-card {
+    height: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hobbies-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+  
+  .hobby-card {
+    height: 300px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .hobby-card-back h3 {
+    font-size: var(--font-size-base);
+  }
+  
+  .hobby-card-back p {
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 576px) {
+  .hobby-card {
+    height: 280px;
+  }
+  
+  .hobby-card-back p {
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* Touch device support */
+@media (hover: none) and (pointer: coarse) {
+  .hobby-card {
+    cursor: pointer;
+  }
+  
+  .hobby-card.active .hobby-card-inner {
+    transform: rotateY(180deg);
+  }
+}
   </style>
 </head>
 
@@ -1452,6 +1656,7 @@
             <li><a href="#conferences"><i class="fa-solid fa-chalkboard-user"></i> Conferences</a></li>
             <li><a href="#skills"><i class="fa-solid fa-lightbulb"></i> Skills</a></li>
             <li><a href="#certificates"><i class="fa-solid fa-certificate"></i> Certificates</a></li>
+            <li><a href="#hobbies"><i class="fas fa-heart"></i> Hobbies</a></li>
             <li><a href="#contact"><i class="fa-solid fa-envelope"></i> Contact Me</a></li>
         </ul>
         
@@ -1847,6 +2052,122 @@
       </div>
     </div>
   </section>
+  <!-- Hobbies & Interests Section -->
+<!-- Hobbies & Interests Section -->
+<section id="hobbies" class="hobbies-section">
+  <div class="container">
+    <h2>Hobbies & Interests</h2>
+    <div class="hobbies-grid">
+      <!-- Trekking & Hiking -->
+      <div class="hobby-card">
+        <div class="hobby-card-inner">
+          <div class="hobby-card-front">
+            <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Trekking & Hiking" class="hobby-image">
+            <div class="hobby-icon-overlay">
+              <i class="fas fa-mountain"></i>
+            </div>
+            <div class="hobby-title-front">Trekking & Hiking</div>
+          </div>
+          <div class="hobby-card-back">
+            <i class="fas fa-mountain"></i>
+            <h3>Trekking & Hiking</h3>
+            <p>Exploring diverse forest ecosystems and mountainous landscapes through outdoor adventures, connecting with nature while building physical endurance.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bird Watching -->
+      <div class="hobby-card">
+        <div class="hobby-card-inner">
+          <div class="hobby-card-front">
+            <img src="https://images.unsplash.com/photo-1429667947446-3c93a979b7e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Bird Watching" class="hobby-image">
+            <div class="hobby-icon-overlay">
+              <i class="fas fa-dove"></i>
+            </div>
+            <div class="hobby-title-front">Bird Watching</div>
+          </div>
+          <div class="hobby-card-back">
+            <i class="fas fa-dove"></i>
+            <h3>Bird Watching</h3>
+            <p>Identifying avian species and understanding their behavior, migration patterns, and ecological roles in different habitats through careful observation.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tree Identification -->
+      <div class="hobby-card">
+        <div class="hobby-card-inner">
+          <div class="hobby-card-front">
+            <img src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Tree Identification" class="hobby-image">
+            <div class="hobby-icon-overlay">
+              <i class="fas fa-tree"></i>
+            </div>
+            <div class="hobby-title-front">Tree Identification</div>
+          </div>
+          <div class="hobby-card-back">
+            <i class="fas fa-tree"></i>
+            <h3>Tree Identification</h3>
+            <p>Studying native and exotic tree species, their characteristics, growth patterns, and ecological significance for conservation and education purposes.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ecological Restoration -->
+      <div class="hobby-card">
+        <div class="hobby-card-inner">
+          <div class="hobby-card-front">
+            <img src="https://images.unsplash.com/photo-1429667947446-3c93a979b7e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Ecological Restoration" class="hobby-image">
+            <div class="hobby-icon-overlay">
+              <i class="fas fa-seedling"></i>
+            </div>
+            <div class="hobby-title-front">Ecological Restoration</div>
+          </div>
+          <div class="hobby-card-back">
+            <i class="fas fa-seedling"></i>
+            <h3>Ecological Restoration</h3>
+            <p>Participating in afforestation and habitat restoration programs to support biodiversity conservation and ecosystem recovery efforts.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nature Photography -->
+      <div class="hobby-card">
+        <div class="hobby-card-inner">
+          <div class="hobby-card-front">
+            <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Nature Photography" class="hobby-image">
+            <div class="hobby-icon-overlay">
+              <i class="fas fa-camera"></i>
+            </div>
+            <div class="hobby-title-front">Nature Photography</div>
+          </div>
+          <div class="hobby-card-back">
+            <i class="fas fa-camera"></i>
+            <h3>Nature Photography</h3>
+            <p>Documenting flora, fauna, and landscapes to capture the beauty of natural ecosystems and raise environmental awareness through visual storytelling.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Foraging -->
+      <div class="hobby-card">
+        <div class="hobby-card-inner">
+          <div class="hobby-card-front">
+            <img src="https://images.unsplash.com/photo-1461354464878-ad92f492a5a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Foraging" class="hobby-image">
+            <div class="hobby-icon-overlay">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <div class="hobby-title-front">Foraging</div>
+          </div>
+          <div class="hobby-card-back">
+            <i class="fas fa-leaf"></i>
+            <h3>Foraging</h3>
+            <p>Foraging for wild edibles like fruits, nuts, berries, or herbs while practicing sustainable harvesting techniques and traditional ecological knowledge.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
   <!-- Contact Section -->
   <section id="contact" class="contact-section">
@@ -1876,9 +2197,9 @@
     <div class="container">
       <p>&copy; 2025 Yaseena. All rights reserved.</p>
       <div class="social-links">
-        <a href="https://github.com/yaseenashaik9" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://github.com/saivenkatachala" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
         <a href="https://www.linkedin.com/in/yaseena56/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-        <a href="https://www.instagram.com/its_saivenkat/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.instagram.com/yaseena_56?igsh=MThqN2Q1aXp0YjJhNQ==" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         <a href="https://x.com/yaseena34925" target="_blank"><i class="fab fa-twitter"></i></a>
       </div>
     </div>
@@ -2087,5 +2408,3 @@
   </script>
 </body>
 </html>
-
-
